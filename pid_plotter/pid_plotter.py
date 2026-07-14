@@ -1,3 +1,5 @@
+# Important: Before running it, you must change the SERIAL_PORT variable to match the port your Arduino is connected to (e.g., COM3 on Windows, or /dev/ttyACM0 on Mac/Linux). Also, ensure the Arduino IDE Serial Monitor is closed, as only one program can access the port at a time.                                                                        
+
 import serial
 import time
 import matplotlib.pyplot as plt
@@ -95,3 +97,11 @@ plt.show()
 # Clean up when the window is closed
 ser.close()
 print("Serial port closed.")
+
+
+# How It Works
+# 1.Non-Blocking Reads: The update_plot function checks ser.in_waiting to process all data that has arrived since the last frame. This prevents the plot from lagging behind the Arduino.
+
+# 2.Robust Parsing: It safely wraps the .split() and float() conversions in a try...except block. Serial connections often produce a garbled half-line when first connected, and this ensures the script doesn't crash on the first corrupted data point.
+
+# 3.Dynamic Y-Axis: The script calculates the minimum and maximum values currently in the data arrays and applies a 20% padding margin so the plot automatically scales as you change your target speed in the Arduino code.
